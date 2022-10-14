@@ -421,6 +421,54 @@ def test_control(): #控件功能展示
     selector = st.sidebar.multiselect("请选择你喜欢的选项：", [1, 2, 3], key="3")
     st.write("你的选项分别是：\n",selector1,selector2,selector)
 
+def test_pandas_get(): #测试pandas爬虫
+
+    #import csv
+    chart_list = ['抓取世界大学综合排名','抓取新浪财经基金重仓股数据','抓取证监会披露的IPO数据']
+    sidebar = st.sidebar.selectbox(
+    "请选择：",
+    chart_list
+    )
+
+    if sidebar == "抓取世界大学综合排名":
+        #抓取世界大学排名（1页数据）
+        url1 = 'http://www.compassedu.hk/qs'
+        df1 = pd.read_html(url1)[0]  #0表示网页中的第一个Table
+        df1.to_csv('世界大学综合排名.csv',index=0)
+        st.markdown("## 抓取世界大学综合排名")
+        st.dataframe(df1)
+    elif sidebar == "抓取新浪财经基金重仓股数据":
+        #抓取新浪财经基金重仓股数据（6页数据）
+        df2 = pd.DataFrame()
+        for i in range(6):
+            url2 = 'http://vip.stock.finance.sina.com.cn/q/go.php/vComStockHold/kind/jjzc/index.phtml?p={page}'.format(page=i+1)
+            df2 = pd.concat([df2,pd.read_html(url2)[0]])
+            print('第{page}页抓取完成'.format(page = i + 1))
+        #df2.to_csv('./新浪财经数据.csv',encoding='utf-8',index=0)
+        st.markdown("## 抓取新浪财经基金重仓股数据")
+        st.dataframe(df2)
+    elif sidebar == "抓取证监会披露的IPO数据":
+        #抓取证监会披露的IPO数据（217页数据）
+        from pandas import DataFrame
+        import time
+        st.markdown("## 抓取证监会披露的IPO数据")
+        start = time.time() #计时
+        df3 = DataFrame(data=None,columns=['公司名称','披露日期','上市地和板块','披露类型','查看PDF资料']) #添加列名
+        for i in range(1,218):
+            url3 ='http://eid.csrc.gov.cn/ipo/infoDisplay.action?pageNo=%s&temp=&temp1=&blockType=byTime'%str(i)
+            df3_1 = pd.read_html(url3,encoding='utf-8')[2]  #必须加utf-8，否则乱码
+            df3_2 = df3_1.iloc[1:len(df3_1)-1,0:-1]  #过滤掉最后一行和最后一列（NaN列）
+            df3_2.columns=['公司名称','披露日期','上市地和板块','披露类型','查看PDF资料'] #新的df添加列名
+            df3 = pd.concat([df3,df3_2])  #数据合并
+            st.write('第{page}页抓取完成'.format(page=i))
+        #df3.to_csv('./上市公司IPO信息.csv', encoding='utf-8',index=0) #保存数据到csv文件
+        end = time.time()
+        st.write('共抓取',len(df3),'家公司,' + '用时',round((end-start)/60,2),'分钟')
+        st.dataframe(df3)
+    else:
+        st.title("Pandas抓取数据")
+        st.write("欢迎使用功能强大的Pandas")
+        
 def main():  #主程序模块，调用其他程序模块
     st.sidebar.markdown("# 主程序导航图")
 
@@ -438,39 +486,40 @@ def main():  #主程序模块，调用其他程序模块
 
 
     if object_type == '动态表格展示':
+        
         test_table()
     elif object_type == '基本功能展示':
-        test_base()
+        drow_circle()
     elif object_type == 'write功能展示':
         test_write()
     elif object_type == '控件功能展示':
         test_control()
     elif object_type == '绘图、图片功能展示':
-        test_plot()
+        test_control()
     elif object_type == '音频、视频功能展示':
-        test_audio_video()
+        test_control()
     elif object_type == '网页布局':
-        test_explor()
+        test_control()
     elif object_type == '图像目标检测demo网页':
-        test_pic()
+        test_control()
     elif object_type == '单独页面展示':
-        test_one_page()
+        test_control()
     elif object_type == '数据转换':
-        test_data_trans()
+        test_control()
     elif object_type == '动态图形展示':
-        test_danamic()
+        test_control()
     elif object_type == '跳转新页面':
-        test_iframe()
+        test_control()
     elif object_type == '展示HTML文件内容':
-        test_show_html()
+        test_control()
     elif object_type == '单页显示数据':
-        test_explor_data()
+        test_control()
     elif object_type == '项目管理':
-        test_project()
+        test_control()
     elif object_type == 'pandas爬虫':
         test_pandas_get() #测试pandas爬虫
     elif object_type == '对时间序列数据集进行可视化过滤':
-        test_datetime_filter() #对时间序列数据集进行可视化过滤
+        test_control() #对时间序列数据集进行可视化过滤
         
 if __name__ == '__main__':
     #drow_circle()
