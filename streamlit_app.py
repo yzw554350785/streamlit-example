@@ -5,6 +5,7 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 import datetime
+import base64
 
 def drow_circle():
     with st.echo(code_location='below'):
