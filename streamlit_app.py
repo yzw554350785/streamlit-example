@@ -1,6 +1,7 @@
 from collections import namedtuple
 import altair as alt
 import math
+import numpy as np
 import pandas as pd
 import streamlit as st
 
@@ -476,7 +477,7 @@ def main():  #主程序模块，调用其他程序模块
     options = ['基本功能展示','write功能展示','动态表格展示','控件功能展示','绘图、图片功能展示',\
                 '音频、视频功能展示','网页布局','图像目标检测demo网页','单独页面展示','数据转换',\
                 '动态图形展示','跳转新页面','展示HTML文件内容','单页显示数据','项目管理','文件查找',\
-                '修改配置信息','文件下载','图像识别','altair可视化数据分析','对时间序列数据集进行可视化过滤']
+                '修改配置信息','文件下载','pandas爬虫','altair可视化数据分析','对时间序列数据集进行可视化过滤']
     object_type = st.sidebar.selectbox("请选择程序模块", options, 1)
     # min_elts, max_elts = st.sidebar.slider("多少 %s     (选择一个范围)?" % object_type, 0, 25, [10, 20])
     # selected_frame_index = st.sidebar.slider("选择一帧 (帧的索引)", 0, len(object_type) - 1, 0)
